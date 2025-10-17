@@ -1,3 +1,6 @@
+import js from "@eslint/js";
+import next from "eslint-config-next";
+
 import { dirname } from "path";
 import { fileURLToPath } from "url";
 import { FlatCompat } from "@eslint/eslintrc";
@@ -10,6 +13,8 @@ const compat = new FlatCompat({
 });
 
 const eslintConfig = [
+  js.configs.recommended, // ✅ enables no-undef and other basic JS rules
+  ...next(),
   ...compat.extends("next/core-web-vitals"),
   {
     ignores: [
@@ -19,6 +24,10 @@ const eslintConfig = [
       "build/**",
       "next-env.d.ts",
     ],
+    rules: {
+      "no-undef": "error", // ✅ underline undeclared variables
+      "no-unused-vars": "warn", // optional, warns for unused variables
+    },
   },
 ];
 

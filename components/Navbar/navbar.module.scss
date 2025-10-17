@@ -1,0 +1,26 @@
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 2rem;
+  color: white;
+}
+.title {
+  font-weight: bold;
+  font-size: 1.2rem;
+}
+.logout {
+  background: transparent;
+  border: 1px solid white;
+  padding: 0.3rem 0.8rem;
+  border-radius: 4px;
+  cursor: pointer;
+  color: white;
+  font-weight: bold;
+}
+.orange {
+  background-color: orange;
+}
+.blue {
+  background-color: #0070f3;
+}
