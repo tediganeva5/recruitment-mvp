@@ -2,12 +2,12 @@ import NavLink from "@/components/NavLink/NavLink";
 
 import classes from "./sidebar.module.scss";
 
-const Sidebar = () => {
+const Sidebar = ({ href }) => {
   return (
     <aside className={classes.sidebar}>
       <nav className={classes.nav}>
-        <NavLink href="/recruiter/jobs">Browse Jobs</NavLink>
-        <NavLink href="/recruiter/jobs/new">Add New Job</NavLink>
+        <NavLink href={`${href}/jobs`}>Browse Jobs</NavLink>
+        <NavLink href={`${href}/jobs/new`}>Add New Job</NavLink>
       </nav>
 
       <footer className={classes.footer}>

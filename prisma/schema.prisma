@@ -14,10 +14,39 @@ datasource db {
   directUrl = env("DIRECT_URL")
 }
 
-model User {
-  id        Int      @id @default(autoincrement())
-  email     String   @unique
-  password  String
-  role      Int      // 1 = recruiter, 2 = candidate
-  createdAt DateTime @default(now())
+model Job {
+  id           String     @id @default(cuid())
+  title        String
+  description  String
+  education    String?
+  experience   Int?
+  technologies String[]
+  recruiterId  String
+  createdAt    DateTime   @default(now())
+  updatedAt    DateTime   @updatedAt
+  matches      Match[]
+}
+
+model Candidate {
+  id             String     @id @default(cuid())
+  name           String
+  email          String?
+  education      String?
+  experience     Int?
+  technologies   String[]
+  cvUrl          String?     // (optional for later upload)
+  createdAt      DateTime    @default(now())
+  updatedAt      DateTime    @updatedAt
+  matches        Match[]
+}
+
+model Match {
+  id           String     @id @default(cuid())
+  jobId        String
+  candidateId  String
+  score        Float
+  createdAt    DateTime   @default(now())
+
+  job          Job        @relation(fields: [jobId], references: [id])
+  candidate    Candidate  @relation(fields: [candidateId], references: [id])
 }

@@ -3,9 +3,11 @@ import Navbar from "@/components/Navbar/Navbar";
 import classes from "./layout.module.scss";
 
 const CandidateLayout = ({ children }) => {
+  const href = "/candidate";
+
   return (
     <div className={classes.container}>
-      <Navbar title="Candidate Dashboard" colorClass="blue" />
+      <Navbar href={href} title="Candidate Dashboard" colorClass="blue" />
       <main className={classes.main}>{children}</main>
     </div>
   );

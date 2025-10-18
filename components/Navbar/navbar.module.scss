@@ -5,10 +5,17 @@
   padding: 1rem 2rem;
   color: white;
 }
+
+.link {
+  text-decoration: none;
+  color: inherit;
+}
+
 .title {
   font-weight: bold;
   font-size: 1.2rem;
 }
+
 .logout {
   background: transparent;
   border: 1px solid white;
@@ -18,9 +25,11 @@
   color: white;
   font-weight: bold;
 }
+
 .orange {
   background-color: orange;
 }
+
 .blue {
   background-color: #0070f3;
 }
