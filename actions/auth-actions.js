@@ -25,9 +25,9 @@ export const login = async (prevState, formData) => {
   const role = data.user?.user_metadata?.role;
 
   if (role === "1") {
-    redirect("/recruiter/home");
+    redirect("/recruiter");
   } else if (role === "2") {
-    redirect("/candidate/home");
+    redirect("/candidate");
   }
 };
 
@@ -72,9 +72,9 @@ export const signup = async (prevState, formData) => {
 
   // At this point, Supabase has created the session cookie if auto-confirmed
   if (role === "1") {
-    redirect("/recruiter/home");
+    redirect("/recruiter");
   } else if (role === "2") {
-    redirect("/candidate/home");
+    redirect("/candidate");
   }
 };
 

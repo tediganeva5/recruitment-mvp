@@ -53,12 +53,12 @@ export async function updateSession(request: NextRequest) {
     const role = user.user_metadata?.role;
 
     if (role === "1" && !path.startsWith("/recruiter")) {
-      url.pathname = "/recruiter/home";
+      url.pathname = "/recruiter";
       return NextResponse.redirect(url);
     }
 
     if (role === "2" && !path.startsWith("/candidate")) {
-      url.pathname = "/candidate/home";
+      url.pathname = "/candidate";
       return NextResponse.redirect(url);
     }
   }
