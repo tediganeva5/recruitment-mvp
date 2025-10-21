@@ -32,7 +32,7 @@ model Candidate {
   name           String
   email          String?
   education      String?
-  experience     Int?
+  experience     String?
   technologies   String[]
   cvUrl          String?     // (optional for later upload)
   createdAt      DateTime    @default(now())

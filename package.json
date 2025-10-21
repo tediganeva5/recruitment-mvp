@@ -14,10 +14,15 @@
     "@supabase/supabase-js": "^2.75.0",
     "next": "15.5.5",
     "openai": "^6.5.0",
+    "pdf-parse": "^2.4.4",
+    "pdf2json": "^4.0.0",
+    "pdfjs-dist": "^5.4.296",
     "react": "19.1.0",
     "react-dom": "19.1.0",
     "sass": "^1.93.2",
-    "supabase": "^2.51.0"
+    "supabase": "^2.51.0",
+    "uuid": "^13.0.0",
+    "uuidv4": "^6.2.13"
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3",
