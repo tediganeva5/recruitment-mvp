@@ -58,7 +58,7 @@ const JobForm = () => {
       </div>
 
       <div className={classes.field}>
-        <label htmlFor="skills">Required Technologies / Skills</label>
+        <label htmlFor="skills">Required Skills</label>
         <input
           id="skills"
           name="skills"

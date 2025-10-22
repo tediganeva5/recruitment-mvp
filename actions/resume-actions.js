@@ -1,25 +1,37 @@
 "use server";
 
+import { createClient } from "@/utils/supabase/server";
+
 import { extractCandidateData } from "@/lib/ai/tasks/extractCandidateData";
 import { addCandidateDb } from "@/lib/db/candidate";
 import { extractPdfText } from "@/lib/helpers/extractPdfText";
 
 export const uploadResume = async (prevState, formData) => {
+  const file = formData.get("resume");
+  if (!file) return { success: false, error: "No file provided." };
+
+  // Strict MIME and extension validation
+  const validTypes = ["application/pdf"];
+  const isPdf =
+    validTypes.includes(file.type) || file.name.toLowerCase().endsWith(".pdf");
+
+  if (!isPdf) {
+    return {
+      success: false,
+      error: "Invalid file type. Please upload a PDF file.",
+    };
+  }
+
   try {
-    const file = formData.get("resume");
-    if (!file) return { success: false, error: "No file provided." };
+    // Get recruiter (logged in user)
+    const supabase = await createClient();
 
-    // Strict MIME and extension validation
-    const validTypes = ["application/pdf"];
-    const isPdf =
-      validTypes.includes(file.type) ||
-      file.name.toLowerCase().endsWith(".pdf");
+    const {
+      data: { user },
+    } = await supabase.auth.getUser();
 
-    if (!isPdf) {
-      return {
-        success: false,
-        error: "Invalid file type. Please upload a PDF file.",
-      };
+    if (!user) {
+      throw new Error("Unauthorized");
     }
 
     // Extract text
@@ -37,7 +49,12 @@ export const uploadResume = async (prevState, formData) => {
     // Store the CV in storage and save the candidate data to the database
     console.log("Extracted Candidate Data:", data);
     // const testCVUrl = "https://example.com/test-cv.pdf"; // Placeholder URL
-    const candidate = await addCandidateDb(data, "");
+    const candidateData = {
+      ...data,
+      cvUrl: "test.pdf",
+      userId: user.id,
+    };
+    const candidate = await addCandidateDb(candidateData);
 
     return {
       sucess: true,

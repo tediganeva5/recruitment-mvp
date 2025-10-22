@@ -15,38 +15,47 @@ datasource db {
 }
 
 model Job {
-  id           String     @id @default(cuid())
-  title        String
-  description  String
-  education    String?
-  experience   Int?
-  technologies String[]
-  recruiterId  String
-  createdAt    DateTime   @default(now())
-  updatedAt    DateTime   @updatedAt
-  matches      Match[]
+  id          String     @id @default(cuid())
+  title       String
+  description String
+  education   String?
+  experience  Int?
+  skills      String[]
+  status      String     @default("in_progress") // "in_progress" | "completed" | "error"
+
+  userId      String
+
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @updatedAt
+
+  matches     Match[]    @relation("JobMatches")
 }
 
 model Candidate {
-  id             String     @id @default(cuid())
-  name           String
-  email          String?
-  education      String?
-  experience     String?
-  technologies   String[]
-  cvUrl          String?     // (optional for later upload)
-  createdAt      DateTime    @default(now())
-  updatedAt      DateTime    @updatedAt
-  matches        Match[]
+  id          String     @id @default(cuid())
+  name        String
+  email       String?
+  education   String?
+  experience  String?
+  skills      String[]
+  summary     String?
+  cvUrl       String?
+
+  userId      String
+
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @updatedAt
+
+  matches     Match[]    @relation("CandidateMatches")
 }
 
 model Match {
-  id           String     @id @default(cuid())
-  jobId        String
-  candidateId  String
-  score        Float
-  createdAt    DateTime   @default(now())
+  id          String     @id @default(cuid())
+  jobId       String
+  candidateId String
+  score       Float
+  createdAt   DateTime   @default(now())
 
-  job          Job        @relation(fields: [jobId], references: [id])
-  candidate    Candidate  @relation(fields: [candidateId], references: [id])
+  job         Job        @relation("JobMatches", fields: [jobId], references: [id], onDelete: Cascade)
+  candidate   Candidate  @relation("CandidateMatches", fields: [candidateId], references: [id], onDelete: Cascade)
 }

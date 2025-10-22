@@ -30,10 +30,8 @@ const JobDetailspage = async ({ params }) => {
           </div>
 
           <div className={classes.detailItem}>
-            <span className={classes.label}>Technologies:</span>
-            <span className={classes.value}>
-              {job.technologies?.join(", ")}
-            </span>
+            <span className={classes.label}>Skills:</span>
+            <span className={classes.value}>{job.skills?.join(", ")}</span>
           </div>
         </div>
       </div>

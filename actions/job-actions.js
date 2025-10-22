@@ -15,7 +15,7 @@ export const createJob = async (prevState, formData) => {
   const description = formData.get("description")?.toString().trim();
   const education = formData.get("education")?.toString().trim();
   const experience = Number(formData.get("experience"));
-  const technologies = formData
+  const skills = formData
     .get("skills")
     ?.toString()
     .split(",")
@@ -29,8 +29,8 @@ export const createJob = async (prevState, formData) => {
   if (!education) errors.education = "Education field is required";
   if (!experience || isNaN(experience))
     errors.experience = "Years of experience must be a number";
-  if (!technologies || !technologies.length)
-    errors.technologies = "At least one technology is required";
+  if (!skills || !skills.length)
+    errors.skills = "At least one technology is required";
 
   if (Object.keys(errors).length) {
     return { errors };
@@ -56,8 +56,8 @@ export const createJob = async (prevState, formData) => {
       description,
       education,
       experience,
-      technologies,
-      recruiterId: user.id,
+      skills,
+      userId: user.id,
     };
 
     newJobListing = await addJobDb(jobData);
@@ -71,6 +71,7 @@ export const createJob = async (prevState, formData) => {
   // Trigger background matching process (non-blocking)
   runBackgroundJob(`MatchCandidates-${newJobListing.id}`, async () => {
     const candidates = await getAllCandidatesDb();
+    if (!candidates || !candidates.length) return;
     const { data } = await matchCandidates(newJobListing, candidates);
     await addMultipleMatchesDb(data);
   });
