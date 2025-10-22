@@ -10,6 +10,11 @@ import { getAllCandidatesDb } from "@/lib/db/candidate";
 import { addMultipleMatchesDb } from "@/lib/db/match";
 import { matchCandidates } from "@/lib/ai/tasks/matchCandidates";
 
+import { updateJobStatusDb } from "@/lib/db/job";
+import { notifyJobStatusChange } from "@/utils/supabase/notifyJobUpdate";
+
+import { getMatchedCandidatesForJobDb } from "@/lib/db/candidate";
+
 export const createJob = async (prevState, formData) => {
   const title = formData.get("title")?.toString().trim();
   const description = formData.get("description")?.toString().trim();
@@ -70,12 +75,34 @@ export const createJob = async (prevState, formData) => {
 
   // Trigger background matching process (non-blocking)
   runBackgroundJob(`MatchCandidates-${newJobListing.id}`, async () => {
-    const candidates = await getAllCandidatesDb();
-    if (!candidates || !candidates.length) return;
-    const { data } = await matchCandidates(newJobListing, candidates);
-    await addMultipleMatchesDb(data);
+    try {
+      const candidates = await getAllCandidatesDb();
+      if (!candidates || !candidates.length) {
+        await updateJobStatusDb(newJobListing.id, "completed");
+        await notifyJobStatusChange(newJobListing.id, "completed");
+        return;
+      }
+
+      const { data } = await matchCandidates(newJobListing, candidates);
+      await addMultipleMatchesDb(data);
+
+      await updateJobStatusDb(newJobListing.id, "completed");
+      await notifyJobStatusChange(newJobListing.id, "completed");
+    } catch (err) {
+      console.error("Matching job failed:", err);
+      await updateJobStatusDb(newJobListing.id, "error");
+      await notifyJobStatusChange(newJobListing.id, "error");
+    } finally {
+      //
+    }
   });
 
   // Redirect recruiter to job details page
   redirect(`/recruiter/jobs/${newJobListing.id}`);
+};
+
+export const fetchMatchedCandidates = async (jobId) => {
+  const candidates = await getMatchedCandidatesForJobDb(jobId);
+
+  return candidates;
 };
