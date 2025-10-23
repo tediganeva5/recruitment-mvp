@@ -8,11 +8,13 @@ import { fetchMatchedCandidates } from "@/actions/job-actions";
 
 import { triggerBackgroundMatching } from "@/actions/triggerBackgroundMatching";
 
+import CandidatesList from "../Candidates/CandidatesList";
+
 import classes from "./job-matches.module.scss";
 
 const JobMatches = ({ job, matchedCandidates }) => {
   const [status, setStatus] = useState(job.status);
-  const [candidates, setCandidates] = useState(matchedCandidates ?? []);
+  const [candidates, setCandidates] = useState(matchedCandidates);
 
   const handleFindCandidates = () => {
     triggerBackgroundMatching(job);
@@ -25,13 +27,12 @@ const JobMatches = ({ job, matchedCandidates }) => {
     // Listening for status updates
     channel
       .on("broadcast", { event: "status-changed" }, async (payload) => {
-        const { payload: jobPayload } = payload;
-        if (jobPayload.jobId === job.id) {
-          console.log(`📢 Job ${job.id} status updated:`, jobPayload.status);
-          setStatus(jobPayload.status);
-
-          if (jobPayload.status === "completed") {
-            console.log("✅ Job completed - fetch matched candidates here");
+        const {
+          payload: { jobId, status },
+        } = payload;
+        if (jobId === job.id) {
+          setStatus(status);
+          if (status === "completed") {
             const candidates = await fetchMatchedCandidates(job.id);
             setCandidates(candidates);
           }
@@ -54,34 +55,22 @@ const JobMatches = ({ job, matchedCandidates }) => {
         {status === "in_progress" ? "Matching..." : "Find Candidates"}
       </button>
 
-      <h2>Matched Candidates</h2>
-
-      {status === "in_progress" && (
-        <div className={classes.matchContainer}>
-          <div className={classes.spinner}></div>
-          <p>Matching candidates... please wait</p>
-        </div>
-      )}
+      <div className={classes.matchContainer}>
+        {status === "in_progress" && (
+          <>
+            <div className={classes.spinner}></div>
+            <p>Matching candidates... please wait</p>
+          </>
+        )}
+      </div>
 
       {status === "error" && (
         <p className={classes.error}>Matching failed. Please retry later.</p>
       )}
 
-      {status === "completed" && !candidates.length && <p>No matches found.</p>}
+      {/* Condition when status results in not_found (not added yet) */}
 
-      {status === "completed" && candidates.length > 0 && (
-        <ul className={classes.candidateList}>
-          {candidates.map((c) => (
-            <li key={c.id} className={classes.candidateCard}>
-              <h3>{c.name}</h3>
-              <h4>{c.score}</h4>
-              {c.education && <p>{c.education}</p>}
-              {c.experience && <p>{c.experience}</p>}
-              <p>Skills: {c.skills.join(", ")}</p>
-            </li>
-          ))}
-        </ul>
-      )}
+      <CandidatesList candidates={candidates} />
     </section>
   );
 };

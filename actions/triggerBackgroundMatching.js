@@ -1,9 +1,6 @@
 "use server";
 
-import {
-  // getAllCandidatesDb,
-  getUnmatchedCandidatesDb,
-} from "@/lib/db/candidate";
+import { getUnmatchedCandidatesDb } from "@/lib/db/candidate";
 import { addMultipleMatchesDb } from "@/lib/db/match";
 import { matchCandidates } from "@/lib/helpers/tasks/matchCandidates";
 
@@ -15,6 +12,8 @@ export const triggerBackgroundMatching = async (job) => {
   setImmediate(async () => {
     console.log(`Starting background matching`);
     try {
+      await updateJobStatusDb(job.id, "in_progress");
+      await notifyJobStatusChange(job.id, "in_progress");
       // Could add additional param to obtain all candidates or candidates with no matches
       const candidates = await getUnmatchedCandidatesDb(job.id);
       if (!candidates || !candidates.length) {
