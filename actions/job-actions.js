@@ -8,7 +8,7 @@ import { addJobDb } from "@/lib/db/job";
 
 import { getMatchedCandidatesForJobDb } from "@/lib/db/candidate";
 
-import { triggerBackgroundMatching } from "@/actions/triggerBackgroundMatching";
+import { triggerBackgroundMatching } from "@/actions/background-actions";
 
 export const createJob = async (prevState, formData) => {
   const title = formData.get("title")?.toString().trim();
@@ -39,7 +39,6 @@ export const createJob = async (prevState, formData) => {
   let newJobListing;
 
   try {
-    // Get recruiter (logged in user)
     const supabase = await createClient();
 
     const {
@@ -76,7 +75,21 @@ export const createJob = async (prevState, formData) => {
 };
 
 export const fetchMatchedCandidates = async (jobId) => {
-  const candidates = await getMatchedCandidatesForJobDb(jobId);
+  try {
+    const supabase = await createClient();
 
-  return candidates;
+    const {
+      data: { user },
+    } = await supabase.auth.getUser();
+
+    if (!user) {
+      throw new Error("Unauthorized");
+    }
+
+    const candidates = await getMatchedCandidatesForJobDb(jobId);
+
+    return candidates;
+  } catch (err) {
+    console.error(err);
+  }
 };

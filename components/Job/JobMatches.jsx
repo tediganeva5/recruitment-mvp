@@ -6,7 +6,7 @@ import { createClient } from "@/utils/supabase/client";
 
 import { fetchMatchedCandidates } from "@/actions/job-actions";
 
-import { triggerBackgroundMatching } from "@/actions/triggerBackgroundMatching";
+import { triggerBackgroundMatching } from "@/actions/background-actions";
 
 import CandidatesList from "../Candidates/CandidatesList";
 
