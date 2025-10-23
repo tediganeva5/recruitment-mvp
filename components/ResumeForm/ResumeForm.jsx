@@ -8,43 +8,37 @@ import classes from "./resume-form.module.scss";
 
 const ResumeForm = () => {
   const [formState, formAction, isPending] = useActionState(uploadResume, {});
-  const { success, error, text } = formState;
+
+  const handleSubmitResumeForm = (formData) => {
+    formState.error = null;
+    formAction(formData);
+  };
 
   return (
-    <>
-      <div className={classes.container}>
-        <form action={formAction} className={classes.form}>
-          <label className={classes.label}>
-            Upload your resume (PDF)
-            <input
-              className={classes.input}
-              type="file"
-              name="resume"
-              accept="application/pdf"
-              required
-              disabled={isPending}
-            />
-          </label>
+    <div className={classes.container}>
+      <form action={handleSubmitResumeForm} className={classes.form}>
+        <label className={classes.label}>
+          Upload your resume (PDF)
+          <input
+            className={classes.input}
+            type="file"
+            name="resume"
+            accept="application/pdf"
+            required
+            disabled={isPending}
+          />
+        </label>
 
-          <button type="submit" className={classes.button} disabled={isPending}>
-            {isPending ? "Uploading…" : "Upload Resume"}
-          </button>
-        </form>
+        <button type="submit" className={classes.button} disabled={isPending}>
+          {isPending ? "Uploading…" : "Upload Resume"}
+        </button>
+      </form>
 
-        <div className={classes.message}>
-          {isPending && (
-            <p>Processing resume — this may take a few seconds...</p>
-          )}
-          {success && (
-            <p className={classes.success}>
-              ✅ Resume parsed successfully. Candidate data saved.
-            </p>
-          )}
-          {error && <p className={classes.error}>❌ {error}</p>}
-        </div>
+      <div className={classes.message}>
+        {isPending && <p>Processing resume — this may take a few seconds...</p>}
+        {formState.error && <p className={classes.error}>{formState.error}</p>}
       </div>
-      {text && <div>{text}</div>}
-    </>
+    </div>
   );
 };
 

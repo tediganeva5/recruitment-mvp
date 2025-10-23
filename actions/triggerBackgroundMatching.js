@@ -10,27 +10,27 @@ import { matchCandidates } from "@/lib/helpers/tasks/matchCandidates";
 import { updateJobStatusDb } from "@/lib/db/job";
 import { notifyJobStatusChange } from "@/utils/supabase/notifyJobUpdate";
 
-export const triggerBackgroundMatching = async (newJobListing) => {
+export const triggerBackgroundMatching = async (job) => {
   // Fire-and-forget
   setImmediate(async () => {
     console.log(`Starting background matching`);
     try {
       // Could add additional param to obtain all candidates or candidates with no matches
-      const candidates = await getUnmatchedCandidatesDb(newJobListing.id);
+      const candidates = await getUnmatchedCandidatesDb(job.id);
       if (!candidates || !candidates.length) {
-        await updateJobStatusDb(newJobListing.id, "completed");
-        await notifyJobStatusChange(newJobListing.id, "completed");
+        await updateJobStatusDb(job.id, "completed");
+        await notifyJobStatusChange(job.id, "completed");
         return;
       }
 
-      const { data } = await matchCandidates(newJobListing, candidates);
+      const { data } = await matchCandidates(job, candidates);
       await addMultipleMatchesDb(data);
 
-      await updateJobStatusDb(newJobListing.id, "completed");
-      await notifyJobStatusChange(newJobListing.id, "completed");
+      await updateJobStatusDb(job.id, "completed");
+      await notifyJobStatusChange(job.id, "completed");
     } catch (err) {
-      await updateJobStatusDb(newJobListing.id, "error");
-      await notifyJobStatusChange(newJobListing.id, "error");
+      await updateJobStatusDb(job.id, "error");
+      await notifyJobStatusChange(job.id, "error");
     } finally {
       console.log(`Completed background matching`);
     }

@@ -6,7 +6,7 @@ import { createClient } from "@/utils/supabase/client";
 
 import { fetchMatchedCandidates } from "@/actions/job-actions";
 
-import { triggerBackgroundMatching } from "@/lib/helpers/triggerBackgroundMatching";
+import { triggerBackgroundMatching } from "@/actions/triggerBackgroundMatching";
 
 import classes from "./job-matches.module.scss";
 

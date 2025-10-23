@@ -8,7 +8,7 @@ import { addJobDb } from "@/lib/db/job";
 
 import { getMatchedCandidatesForJobDb } from "@/lib/db/candidate";
 
-import { triggerBackgroundMatching } from "@/lib/helpers/triggerBackgroundMatching";
+import { triggerBackgroundMatching } from "@/actions/triggerBackgroundMatching";
 
 export const createJob = async (prevState, formData) => {
   const title = formData.get("title")?.toString().trim();
