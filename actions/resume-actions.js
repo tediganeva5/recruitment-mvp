@@ -2,7 +2,7 @@
 
 import { createClient } from "@/utils/supabase/server";
 
-import { extractCandidateData } from "@/lib/ai/tasks/extractCandidateData";
+import { extractCandidateData } from "@/lib/helpers/tasks/extractCandidateData";
 import { addCandidateDb } from "@/lib/db/candidate";
 import { extractPdfText } from "@/lib/helpers/extractPdfText";
 
@@ -37,6 +37,7 @@ export const uploadResume = async (prevState, formData) => {
     // Extract text
     const extractedText = await extractPdfText(file);
 
+    // Pre-screening
     if (!extractedText || extractedText.length < 50) {
       return {
         success: false,
