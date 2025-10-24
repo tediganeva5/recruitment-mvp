@@ -12,7 +12,7 @@ const JobDetailspage = async ({ params }) => {
   const job = await getJobByIdDb(jobId);
 
   if (!job) {
-    return <p className={classes.error}>Job not found.</p>;
+    return <p className={classes.error}>Job not found.</p>; // TODO: add notFound page
   }
 
   const matchedCandidates = await getMatchedCandidatesForJobDb(jobId);

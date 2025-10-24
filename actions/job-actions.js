@@ -9,6 +9,7 @@ import { addJobDb } from "@/lib/db/job";
 import { getMatchedCandidatesForJobDb } from "@/lib/db/candidate";
 
 import { triggerBackgroundMatching } from "@/actions/background-actions";
+import { revalidatePath } from "next/cache";
 
 export const createJob = async (prevState, formData) => {
   const title = formData.get("title")?.toString().trim();
@@ -39,6 +40,7 @@ export const createJob = async (prevState, formData) => {
   let newJobListing;
 
   try {
+    // TODO: Extract in a helper function
     const supabase = await createClient();
 
     const {
@@ -60,6 +62,7 @@ export const createJob = async (prevState, formData) => {
     };
 
     newJobListing = await addJobDb(jobData);
+    revalidatePath("/recruiter/jobs");
   } catch (err) {
     console.error("Job listing creation error:", err);
     return {

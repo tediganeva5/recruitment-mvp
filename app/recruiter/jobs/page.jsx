@@ -1,10 +1,14 @@
 import JobListings from "@/components/JobListings/JobListings";
 
-const JobsPaage = () => {
+import { getAllJobsDb } from "@/lib/db/job";
+
+const JobsPaage = async () => {
+  const jobs = await getAllJobsDb();
+
   return (
     <div>
       <h1 style={{ marginBottom: "2rem" }}>Job Listings</h1>
-      <JobListings />
+      <JobListings jobs={jobs} />
     </div>
   );
 };

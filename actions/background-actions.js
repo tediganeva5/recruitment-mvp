@@ -6,12 +6,14 @@ import { matchCandidates } from "@/lib/helpers/tasks/matchCandidates";
 
 import { updateJobStatusDb } from "@/lib/db/job";
 import { notifyJobStatusChange } from "@/utils/supabase/notifyJobUpdate";
+import { revalidatePath } from "next/cache";
 
 const setJobStatus = async (jobId, status) => {
   await updateJobStatusDb(jobId, status);
   await notifyJobStatusChange(jobId, status);
 };
 
+// Potentially to be implemented as an edge function with Supabase
 export const triggerBackgroundMatching = async (job) => {
   // Fire-and-forget
   (async () => {
@@ -40,6 +42,7 @@ export const triggerBackgroundMatching = async (job) => {
       status = "error";
     } finally {
       await setJobStatus(job.id, status);
+      // revalidatePath(`/recruiter/jobs/${job.id}`) if cached, but currently dynamicly pre-rendered
       console.log(`Completed background matching`);
     }
   })();
