@@ -22,7 +22,7 @@ const JobMatches = ({ job, matchedCandidates }) => {
 
   useEffect(() => {
     const supabase = createClient();
-    const channel = supabase.channel("job-status");
+    const channel = supabase.channel(`job-${job.id}-status`);
 
     // Listening for status updates
     channel

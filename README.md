@@ -1,36 +1,120 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Recruiter MVP Platform
 
-## Getting Started
+A minimal recruitment matching platform built with **Next.js 15**, **Supabase**, and **Prisma**.  
+Recruiters can post jobs and view matched candidates in real time.  
+Candidates upload resumes as PDFs — AI extracts key data for storage and future matching.
 
-First, run the development server:
+---
+
+## Current Features
+
+### 👩‍💼 Recruiter Side
+
+- Create and submit new job listings.
+- View AI-matched candidates for each job.
+- Real-time job status and match updates via **Supabase Broadcast**.
+- Refresh button to manually check for newly available candidates.
+
+### 🧾 Candidate Side
+
+- Upload a PDF resume (no form inputs yet).
+- AI parses resume details (education, experience, skills) and stores structured data in the database.
+
+### ⚙️ Backend Logic
+
+- **Supabase Auth** for secure access control.
+- **Supabase PostgreSQL** as the main database, managed via **Prisma ORM**.
+- **Supabase Broadcast Channels** for real-time updates.
+- **AI-based resume parsing** using OpenAI, with structured JSON extraction.
+
+---
+
+## 🧩 Future Improvements
+
+### Candidate Enhancements
+
+- Trigger job matching automatically after successful resume upload.
+- Allow candidates to review and edit AI-extracted data before saving.
+
+### Recruiter Enhancements
+
+- Recruiters can view and edit their own job listings.
+- Restrict “Refresh Matches” to owned listings only.
+- View-only access for jobs created by other recruiters.
+
+### Technical Improvements
+
+- Migrate to **TypeScript** for type safety.
+- Introduce **Edge Functions** for better performance.
+- Integrate **UI libraries** (e.g., shadcn/ui or Chakra).
+- Improve responsive design.
+- Optimize AI resume parsing and error handling.
+- Add rate-limiting and retry logic for AI parsing.
+- Review **caching and revalidation** strategies for job pages.
+
+---
+
+## 🧰 Tech Stack
+
+| Layer             | Technology                         |
+| ----------------- | ---------------------------------- |
+| Frontend          | Next.js 15 (App Router)            |
+| Backend           | Next.js Server Actions, Prisma ORM |
+| Auth              | Supabase Auth                      |
+| Database          | Supabase PostgreSQL                |
+| Realtime          | Supabase Broadcast Channels        |
+| AI Resume Parsing | OpenAI API                         |
+| Styling           | CSS Modules                        |
+
+---
+
+## ⚙️ Local Setup
+
+### 1️⃣ Clone the Repository
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+git clone https://github.com/yourusername/recruiter-mvp.git
+cd recruiter-mvp
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+### 2️⃣ Install Dependencies
 
-You can start editing the page by modifying `app/page.js`. The page auto-updates as you edit the file.
+```bash
+yarn install
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+### 3️⃣ Configure Environment Variables
 
-## Learn More
+Create a `.env.local` file based on `.env.example`:
 
-To learn more about Next.js, take a look at the following resources:
+### 4️⃣ Setup Prisma and Database
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+Run initial migrations and generate the Prisma client:
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+```bash
+npx prisma migrate dev
+npx prisma generate
+```
 
-## Deploy on Vercel
+To inspect your database:
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+```bash
+npx prisma studio
+```
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+### 5️⃣ Run the Development Server
+
+```bash
+yarn dev
+```
+
+Your app will be live at [http://localhost:3000](http://localhost:3000).
+
+### 6️⃣ Build for Production
+
+```bash
+yarn build
+yarn start
+```
+
+---

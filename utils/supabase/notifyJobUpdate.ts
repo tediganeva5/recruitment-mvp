@@ -4,7 +4,7 @@ export async function notifyJobStatusChange(jobId: string, status: string) {
   const supabase = await createClient();
 
   try {
-    await supabase.channel("job-status").send({
+    await supabase.channel(`job-${jobId}-status`).send({
       type: "broadcast",
       event: "status-changed",
       payload: { jobId, status },

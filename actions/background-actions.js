@@ -6,7 +6,6 @@ import { matchCandidates } from "@/lib/helpers/tasks/matchCandidates";
 
 import { updateJobStatusDb } from "@/lib/db/job";
 import { notifyJobStatusChange } from "@/utils/supabase/notifyJobUpdate";
-import { revalidatePath } from "next/cache";
 
 const setJobStatus = async (jobId, status) => {
   await updateJobStatusDb(jobId, status);
