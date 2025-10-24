@@ -50,6 +50,7 @@ Candidates upload resumes as PDFs — AI extracts key data for storage and futur
 - Improve responsive design.
 - Optimize AI resume parsing and error handling.
 - Add rate-limiting and retry logic for AI parsing.
+- Improve matching pre-screening and scoring strategy.
 - Review **caching and revalidation** strategies for job pages.
 
 ---
@@ -64,7 +65,7 @@ Candidates upload resumes as PDFs — AI extracts key data for storage and futur
 | Database          | Supabase PostgreSQL                |
 | Realtime          | Supabase Broadcast Channels        |
 | AI Resume Parsing | OpenAI API                         |
-| Styling           | CSS Modules                        |
+| Styling           | CSS Modules (Sass/SCSS)            |
 
 ---
 
